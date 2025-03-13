@@ -69,12 +69,10 @@ exports.addSchool = async (req, res) => {
   }
 };
 
-// List all schools sorted by proximity
 exports.listSchools = async (req, res) => {
   try {
     const { latitude, longitude } = req.query;
 
-    // Validate location parameters
     if (!latitude || !longitude || isNaN(parseFloat(latitude)) || isNaN(parseFloat(longitude))) {
       return res.status(400).json({
         success: false,
@@ -85,7 +83,6 @@ exports.listSchools = async (req, res) => {
     const userLat = parseFloat(latitude);
     const userLng = parseFloat(longitude);
 
-    // Validate coordinates
     if (userLat < -90 || userLat > 90 || userLng < -180 || userLng > 180) {
       return res.status(400).json({
         success: false,
@@ -93,10 +90,8 @@ exports.listSchools = async (req, res) => {
       });
     }
 
-    // Get schools sorted by proximity
     const schools = await School.getSchoolsByProximity(userLat, userLng);
 
-    // Check if no schools found
     if (!schools || schools.length === 0) {
       return res.status(404).json({
         success: false,
